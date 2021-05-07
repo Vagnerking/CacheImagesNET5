@@ -139,7 +139,7 @@ namespace FrameworkBox
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Error occurred on deleting this group... Try Again. \n\nError Message: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
