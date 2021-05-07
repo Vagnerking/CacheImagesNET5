@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -33,17 +33,65 @@ namespace FrameworkBox
             }
         }
 
-        public static Image SearchImage(Uri url, string groupName, int id)
+        public static async Task<bool> DownloadOneImage(Tuple<Uri, string, int> specificImage) // uri, id, groupname
         {
-            string localDir = $"{ appStartLocal }" + $@"{groupName}" + @"\";
-            string urlWithoutSimbols = Regex.Replace(url.ToString(), @"[\/:*?''<>|]", "");
-            //
-            string searchPath = localDir + id + "_" + urlWithoutSimbols;
+            try
+            {
+                CreateFolder(specificImage.Item2);
+                await DownloadImage(specificImage.Item1, specificImage.Item2, specificImage.Item3);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex}");
+                return false;
+            }
+        }
 
-            if (File.Exists(Path.Combine(searchPath)))
+        private static async Task<Image> DownloadOneImageAndReturn(Tuple<Uri, string, int> specificImage) // uri, id, groupname
+        {
+            string localDir = $"{ appStartLocal }" + $@"{specificImage.Item2}" + @"\";
+            string urlWithoutSimbols = Regex.Replace(specificImage.Item1.ToString(), @"[\/:*?''<>|]", "");
+            //
+            string searchPath = localDir + specificImage.Item3 + "_" + urlWithoutSimbols;
+
+            try
+            {
+                CreateFolder(specificImage.Item2);
+                await DownloadImage(specificImage.Item1, specificImage.Item2, specificImage.Item3);
                 return Image.FromFile(searchPath);
-            else
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex}");
                 return null;
+            }
+        }
+
+        public async static Task<Image> SearchImage(Uri url, string groupName, int id)
+        {
+            try
+            {
+                string localDir = $"{ appStartLocal }" + $@"{groupName}" + @"\";
+                string urlWithoutSimbols = Regex.Replace(url.ToString(), @"[\/:*?''<>|]", "");
+                //
+                string searchPath = localDir + id + "_" + urlWithoutSimbols;
+
+                if (File.Exists(Path.Combine(searchPath)))
+                    return Image.FromFile(searchPath);
+                else
+                {
+                    var imgToDownload = Tuple.Create(url, groupName, id);
+                    await DownloadOneImageAndReturn(imgToDownload);
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error on searching this image. Try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
 
         public static bool DeleteGroup(string groupName)
@@ -58,7 +106,7 @@ namespace FrameworkBox
                 {
                     DirectoryInfo di = new(localDir);
 
-                    foreach(FileInfo dirFile in di.GetFiles())
+                    foreach (FileInfo dirFile in di.GetFiles())
                     {
                         dirFile.IsReadOnly = false;
                         dirFile.Delete();
@@ -75,7 +123,7 @@ namespace FrameworkBox
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occurred on deleting this group... Try Again. Erro: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error occurred on deleting this group... Try Again. \n\nError Message: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -93,7 +141,7 @@ namespace FrameworkBox
             }
             catch (Exception)
             {
-                MessageBox.Show("Error occurred on deleting this group... Try Again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error occurred on deleting this group... Try Again. \n\nError Message: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
