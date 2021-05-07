@@ -11,7 +11,6 @@ namespace FrameworkBox
 {
     public static class CacheImage
     {
-        //hello
 
         private static readonly string appStartLocal = $"{ AppDomain.CurrentDomain.BaseDirectory}";
 
