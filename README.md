@@ -51,7 +51,7 @@
             string groupName = "Restaurantes";
             Uri url = new Uri(@"https://i.imgur.com/WpOgwlx.jpg");
 
-            pictureBox.Image = await CacheImage.SearchImage(url, "groupName", Id);
+            pictureBox.Image = await CacheImage.SearchImage(url, groupName, Id);
             
             
 => DELETE GROUP BY NAME
