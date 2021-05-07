@@ -81,10 +81,8 @@ namespace FrameworkBox
                 else
                 {
                     var imgToDownload = Tuple.Create(url, groupName, id);
-                    await DownloadOneImageAndReturn(imgToDownload);
+                    return await DownloadOneImageAndReturn(imgToDownload);
                 }
-
-                return null;
             }
             catch (Exception ex)
             {
