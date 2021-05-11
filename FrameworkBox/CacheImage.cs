@@ -13,7 +13,7 @@ namespace FrameworkBox
     {
         //hello
 
-        private static readonly string appCacheFolder = $@"{ Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}" + @$"\{Application.CompanyName}" + @$"\{Application.ProductName}";
+        private static readonly string appCacheFolder = $@"{ Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}" + @$"\{Application.CompanyName}" + @$"\{Application.ProductName}\";
 
         public static async Task<bool> DownloadImageList(IList<Tuple<Uri, string, int>> imagesList) // uri, id, groupname
         {
