@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FrameworkBox
-{
+    {
     public static class CacheImage
     {
+        //hello
 
-        private static readonly string appStartLocal = $"{ AppDomain.CurrentDomain.BaseDirectory}";
+        private static readonly string appCacheFolder = $@"{ Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}" + @$"\{Application.CompanyName}" + @$"\{Application.ProductName}";
 
         public static async Task<bool> DownloadImageList(IList<Tuple<Uri, string, int>> imagesList) // uri, id, groupname
         {
@@ -49,7 +50,7 @@ namespace FrameworkBox
 
         private static async Task<Image> DownloadOneImageAndReturn(Tuple<Uri, string, int> specificImage) // uri, id, groupname
         {
-            string localDir = $"{ appStartLocal }" + $@"{specificImage.Item2}" + @"\";
+            string localDir = $"{ appCacheFolder }" + $@"{specificImage.Item2}" + @"\";
             string urlWithoutSimbols = Regex.Replace(specificImage.Item1.ToString(), @"[\/:*?''<>|]", "");
             //
             string searchPath = localDir + specificImage.Item3 + "_" + urlWithoutSimbols;
@@ -71,7 +72,7 @@ namespace FrameworkBox
         {
             try
             {
-                string localDir = $"{ appStartLocal }" + $@"{groupName}" + @"\";
+                string localDir = $"{ appCacheFolder }" + $@"{groupName}" + @"\";
                 string urlWithoutSimbols = Regex.Replace(url.ToString(), @"[\/:*?''<>|]", "");
                 //
                 string searchPath = localDir + id + "_" + urlWithoutSimbols;
@@ -95,7 +96,7 @@ namespace FrameworkBox
         {
             try
             {
-                string localDir = $"{ appStartLocal }" + $@"{groupName}";
+                string localDir = $"{ appCacheFolder }" + $@"{groupName}";
                 var directory = new DirectoryInfo(localDir);
                 // Deletar cache das imagens do restaurante
 
@@ -145,7 +146,7 @@ namespace FrameworkBox
 
         private static async Task<bool> DownloadImage(Uri url, string groupName, int id)
         {
-            string localDir = $"{ appStartLocal }" + $@"{groupName}" + @"\";
+            string localDir = $"{ appCacheFolder }" + $@"{groupName}" + @"\";
             string urlWithoutSimbols = Regex.Replace(url.ToString(), @"[\/:*?''<>|]", "");
             //
             string saveToPath = localDir + id + "_" + urlWithoutSimbols;
@@ -183,7 +184,7 @@ namespace FrameworkBox
 
         private static void CreateFolder(string GroupName)
         {
-            string localFolder = $"{ appStartLocal }" + $@"\{GroupName}";
+            string localFolder = $"{ appCacheFolder }" + $@"\{GroupName}";
 
             try
             {
