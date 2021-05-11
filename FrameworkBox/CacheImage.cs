@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FrameworkBox
-    {
+{
     public static class CacheImage
     {
         //hello
